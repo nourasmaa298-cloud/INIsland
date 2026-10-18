@@ -15,6 +15,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Extract project zip (if uploaded as zip)
+        run: |
+          z=$(find . -maxdepth 2 -iname "*.zip" -not -path "./.git/*" | head -n1)
+          if [ -n "$z" ]; then
+            echo "Found zip: $z"
+            mkdir -p _src
+            unzip -q -o "$z" -d _src
+          fi
+
       - name: Locate Gradle project
         id: proj
         run: |
